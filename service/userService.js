@@ -3,7 +3,7 @@ const user = require("../models/users");
 class User{
 
 async getUser(){
- return await user.find({})
+ return await user.find({}, {password: 0})
 }
 
 async deleteUser(id){

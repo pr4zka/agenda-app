@@ -4,19 +4,220 @@ const {
   tokenValidator,
   postValidator,
   validateID,
-} = require("../middlewares/taskValidation");
+} = require("../middlewares/indexValidation");
 
 function tasks(app) {
   const router = Router();
   app.use("/api/tasks", router);
-  router.get("/", tokenValidator, taskControllers.getAll);
+
+  /**
+   * @swagger
+   *  components:
+   *    schemas:
+   *     Task:
+   *       properties:
+   *        title:
+   *         type: string
+   *         description: Titulo de la tarea
+   *        description:
+   *         type: string
+   *         description: Descripcion de la tarea
+   *        done:
+   *         type: boolean
+   *         description: Estado de la tarea
+   *        team:
+   *         type: string
+   *         description: Equipo asignado a la tarea
+   *        user:
+   *         type: string
+   *         description: Usuario asignado a la tarea
+   */
+
+  /**
+   * @swagger
+   * /api/tasks:
+   *  get:
+   *   summary: Obtiene todas las tareas
+   *   tags: [Tasks]
+   *   responses:
+   *    200:
+   *      description: Tareas obtenidas
+   *      content:
+   *        application/json:
+   *          schema:
+   *            type: object
+   *            items:
+   *            $ref: '#/components/schemas/Task'
+   */
+  router.get("/", taskControllers.getAll);
+  /**
+   * @swagger
+   * /api/tasks/{id}:
+   *  get:
+   *    summary: Obtiene una tarea
+   *    tags: [Tasks]
+   *    parameters:
+   *      - in: path
+   *        name: id
+   *        schema:
+   *         type: string
+   *        required: true
+   *        description: ID de la tarea
+   *    responses:
+   *     200:
+   *       description: Tarea obtenida
+   *     400:
+   *       description: Tarea no encontrada
+   */
   router.get("/:id", validateID, taskControllers.getById);
-  router.put("/assign/:id", taskControllers.assignTeam);
-  router.put("/assign/user/:id", taskControllers.assignTask);
-  router.put("/remove/:id", taskControllers.removeTeam);
-  router.put("/removeUser/:id", taskControllers.removeUser);
+  /**
+   * @swagger
+   * /api/tasks/assign/{id}:
+   *  put:
+   *    summary: Asigna una tarea a un Equipo
+   *    tags: [Tasks]
+   *    parameters:
+   *     - in: path
+   *       name: id
+   *       schema:
+   *        type: string
+   *       required: true
+   *       description: ID de la tarea
+   *    requestBody:
+   *      required: true
+   *      content:
+   *       application/json:
+   *         schema:
+   *           type: object
+   *           $ref: '#/components/schemas/Task'
+   *    responses:
+   *     200:
+   *       description: Equipo asignado
+   *     400:
+   *       description: Ocurrio un problema
+   */
+  router.put("/assign/:id", tokenValidator, taskControllers.assignTeam);
+  /**
+   * @swagger
+   * /api/tasks/assign/user/{id}:
+   *  put:
+   *    summary: Asigna una tarea a un Usuario
+   *    tags: [Tasks]
+   *    parameters:
+   *     - in: path
+   *       name: id
+   *       schema:
+   *        type: string
+   *       required: true
+   *       description: ID de la tarea
+   *    requestBody:
+   *      required: true
+   *      content:
+   *       application/json:
+   *         schema:
+   *           type: object
+   *           $ref: '#/components/schemas/Task'
+   *    responses:
+   *     200:
+   *       description: Usuario asignado
+   *     400:
+   *       description: Ocurrio un problema
+   */
+  router.put("/assign/user/:id", tokenValidator, taskControllers.assignTask);
+  /**
+   * @swagger
+   * /api/tasks/remove/{id}:
+   *  put:
+   *    summary: Elimina un equipo asignado a una tarea
+   *    tags: [Tasks]
+   *    parameters:
+   *     - in: path
+   *       name: id
+   *       schema:
+   *        type: string
+   *       required: true
+   *       description: ID de la tarea
+   *    requestBody:
+   *      required: true
+   *      content:
+   *       application/json:
+   *         schema:
+   *           type: object
+   *           $ref: '#/components/schemas/Task'
+   *    responses:
+   *     200:
+   *       description: Team eliminado
+   *     400:
+   *       description: Ocurrio un problema
+   */
+  router.put("/remove/:id", tokenValidator, taskControllers.removeTeam);
+  /**
+   * @swagger
+   * /api/tasks/removeUser/{id}:
+   *  put:
+   *    summary: Elimina un usuario asignado a una tarea
+   *    tags: [Tasks]
+   *    parameters:
+   *     - in: path
+   *       name: id
+   *       schema:
+   *        type: string
+   *       required: true
+   *       description: ID de la tarea
+   *    requestBody:
+   *      required: true
+   *      content:
+   *       application/json:
+   *         schema:
+   *           type: object
+   *           $ref: '#/components/schemas/Task'
+   *    responses:
+   *     200:
+   *       description: Usuario eliminado
+   *     400:
+   *       description: Ocurrio un problema
+   */
+  router.put("/removeUser/:id", tokenValidator, taskControllers.removeUser);
+  /**
+   * @swagger
+   * /api/tasks:
+   *  post:
+   *    summary: Crea una tarea
+   *    tags: [Tasks]
+   *    requestBody:
+   *      required: true
+   *      content:
+   *        application/json:
+   *          schema:
+   *            type: object
+   *            $ref: '#/components/schemas/Task'
+   *    responses:
+   *     200:
+   *       description: Tarea creada
+   *     400:
+   *       description: Ocurrio un problema
+   */
   router.post("/", tokenValidator, postValidator, taskControllers.createTask);
-  router.delete("/:id", validateID, taskControllers.delete);
+  /**
+   * @swagger
+   * /api/tasks/{id}:
+   *  delete:
+   *    summary: Borra una tarea
+   *    tags: [Tasks]
+   *    parameters:
+   *      - in: path
+   *        name: id
+   *        schema:
+   *         type: string
+   *        required: true
+   *        description: Id de la tarea
+   *    responses:
+   *     200:
+   *       description:   Tarea eliminada
+   *     404:
+   *       description:   Ocurrio un problema
+   */
+  router.delete("/:id", validateID, tokenValidator, taskControllers.delete);
 }
 
 module.exports = tasks;

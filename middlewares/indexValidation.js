@@ -57,16 +57,23 @@ const validateTask = [
     return validationResult(req, res, next)
   }
 ]
-
+const validateTeam = [
+  check("name").notEmpty().exists(),
+  check("description").notEmpty().exists(),
+  (req, res, next) => {
+    return validationResult(req, res, next)
+  }
+]
 
 const validateID = [idExist];
 const tokenValidator = [authMiddleware, checkRolesExisted];
 const postValidator = [validateTask]
-
+const postTeamValidator = [validateTeam]
 
 
 module.exports = {
   validateID,
   tokenValidator,
-  postValidator
+  postValidator,
+  postTeamValidator
 };
