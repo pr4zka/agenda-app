@@ -4,7 +4,7 @@ const {
   postValidator,
   loginValidator,
 } = require("../middlewares/userValidation");
-const { tokenValidator } = require("../middlewares/indexValidation");
+
 
 function auth(app) {
   const router = Router();
@@ -47,7 +47,7 @@ function auth(app) {
    *    400:
    *      description: El usuario no se ha logueado
    */
-  router.post("/login", tokenValidator, loginValidator, async (req, res) => {
+  router.post("/login", loginValidator, async (req, res) => {
     const data = req.body;
     const result = await userService.login(data);
     return res.status(result.error ? 200 : 400).json(result);
@@ -72,7 +72,7 @@ function auth(app) {
    *   400:
    *     description: El usuario no se ha registrado
    */
-  router.post("/register", tokenValidator, postValidator, async (req, res) => {
+  router.post("/register", postValidator, async (req, res) => {
     const data = req.body;
     const result = await userService.signup(data);
     return res.status(result.success ? 200 : 400).json(result);

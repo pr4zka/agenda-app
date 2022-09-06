@@ -19,6 +19,15 @@ class userService {
   //resgistrarse
   async signup(data) {
     try {
+      if (data.email) {
+        const user = await User.findOne({ email: data.email });
+        if (user) {
+          return {
+            error: true,
+            message: "El usuario ya existe",
+          };
+        }
+      }
       if (data.password) {
         data.password = await this.#encrypt(data.password);
       }
@@ -41,16 +50,19 @@ class userService {
   }
   async getUsers() {
     try {
-      const user = await User.find({}, {password: 0,createdAt: 0, updatedAt: 0, role: 0})
-      return{
+      const user = await User.find(
+        {},
+        { password: 0, createdAt: 0, updatedAt: 0, role: 0 }
+      );
+      return {
         success: true,
-        data: user
-      }
+        data: user,
+      };
     } catch (error) {
-       return{
+      return {
         success: false,
-        message: "Ocurrio un problema"
-       }
+        message: "Ocurrio un problema",
+      };
     }
   }
 

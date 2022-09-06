@@ -96,7 +96,7 @@ function tasks(app) {
    *     400:
    *       description: Ocurrio un problema
    */
-  router.put("/assign/:id", tokenValidator, taskControllers.assignTeam);
+  router.put("/assign/:id", validateID,tokenValidator, taskControllers.assignTeam);
   /**
    * @swagger
    * /api/tasks/assign/user/{id}:
@@ -123,7 +123,7 @@ function tasks(app) {
    *     400:
    *       description: Ocurrio un problema
    */
-  router.put("/assign/user/:id", tokenValidator, taskControllers.assignTask);
+  router.put("/assign/user/:id", validateID,tokenValidator, taskControllers.assignTask);
   /**
    * @swagger
    * /api/tasks/remove/{id}:
@@ -150,7 +150,7 @@ function tasks(app) {
    *     400:
    *       description: Ocurrio un problema
    */
-  router.put("/remove/:id", tokenValidator, taskControllers.removeTeam);
+  router.put("/remove/:id", validateID,tokenValidator, taskControllers.removeTeam);
   /**
    * @swagger
    * /api/tasks/removeUser/{id}:
@@ -177,7 +177,34 @@ function tasks(app) {
    *     400:
    *       description: Ocurrio un problema
    */
-  router.put("/removeUser/:id", tokenValidator, taskControllers.removeUser);
+  router.put("/removeUser/:id", validateID,tokenValidator, taskControllers.removeUser);
+  /**
+   * @swagger
+   * /api/tasks/update/{id}:
+   *  put:
+   *    summary: Actualiza una tarea
+   *    tags: [Tasks]
+   *    parameters:
+   *     - in: path
+   *       name: id
+   *       schema:
+   *        type: string
+   *       required: true
+   *       description: ID de la tarea
+   *    requestBody:
+   *      required: true
+   *      content:
+   *       application/json:
+   *         schema:
+   *           type: object
+   *           $ref: '#/components/schemas/Task'
+   *    responses:
+   *     200:
+   *       description: Usuaria actualizado
+   *     400:
+   *       description: Ocurrio un problema
+   */
+  router.put('/update/"id', validateID,tokenValidator, taskControllers.update);
   /**
    * @swagger
    * /api/tasks:

@@ -53,7 +53,16 @@ class teamControllers {
       res.json(error);
     }
   }
-
+  static async update(req, res){
+    try {
+      const { id } = req.params;
+      const { body } = req;
+      const result = await teamService.update(id, body);
+      res.send({ msg: "Actualizado con exito", result });
+    } catch (error) {
+      res.json(error);
+    }
+  }
   static async delete(req, res) {
     try {
       const { id } = req.params;

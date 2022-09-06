@@ -32,6 +32,16 @@ class taskControllers {
       res.json(error);
     }
   }
+  static async update(req, res) {
+    try {
+      const { id } = req.params;
+      const { body } = req;
+      const result = await taskService.update(id, body);
+      res.send({ msg: "Actualizado con exito", result });
+    } catch (error) {
+      res.json(error);
+    }
+  }
 
   static async assignTask(req, res) {
     try {
@@ -54,16 +64,18 @@ class taskControllers {
       res.json(error);
     }
   }
+
   static async removeTeam(req, res) {
     try {
       const { id } = req.params;
       const { team } = req.body;
       await taskService.removeTeam(id, team);
-      return res.send({msg: "Equipo Removido"})
+      return res.send({ msg: "Equipo Removido" });
     } catch (error) {
-      console.log(error)
+      console.log(error);
     }
   }
+
   static async removeUser(req, res) {
     try {
       const { id } = req.params;

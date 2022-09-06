@@ -133,6 +133,33 @@ function team(app) {
  *       description: Ocurrio un problema
  */
   router.put('/remove/:id', validateID,tokenValidator,teamControllers.removeUser)
+  /**
+ * @swagger
+ * /api/team/update/{id}:
+ *  put:
+ *    summary: Actualiza un equipo
+ *    tags: [Team]
+ *    parameters:
+ *     - in: path
+ *       name: id
+ *       schema:
+ *        type: string
+ *       required: true
+ *       description: ID del equipo
+ *    requestBody:
+ *      required: true
+ *      content:
+ *       application/json:
+ *         schema:
+ *           type: object
+ *           $ref: '#/components/schemas/Team'
+ *    responses:
+ *     200:
+ *       description: Usuario actualizado
+ *     400:
+ *       description: Ocurrio un problema
+ */
+  router.put('/update/:id', validateID,tokenValidator,teamControllers.update)
 /**
  * @swagger
  * /api/team/{id}:
