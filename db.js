@@ -1,9 +1,9 @@
 const mongoose = require('mongoose')
-const { PASSWORD, DB, HOST, USER } = require('./config/index')
+const { PASSWORD, DB, HOST, USER, DB_PORT } = require('./config/index')
 
 const connection = async () => {
     const db = await mongoose.connect(
-        `mongodb+srv://${USER}:${PASSWORD}@${HOST}/${DB}`
+        `mongodb+srv://${USER}:${PASSWORD}@${HOST}/${DB}:${DB_PORT}`
     )
     console.log('Connected to db', db.connection.host)
 }

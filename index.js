@@ -54,6 +54,10 @@ auth(app);
 users(app);
 tasks(app);
 team(app);
+app.get('/', (req, res)=> {
+   res.redirect('/api-docs')
+})
+
 
 //port
 const port = process.env.PORT || 4000;
