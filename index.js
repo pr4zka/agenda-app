@@ -5,7 +5,9 @@ const { connection } = require("./db");
 const swaggerUi = require("swagger-ui-express");
 const swaggerJsDoc = require("swagger-jsdoc");
 const path = require('path')
+const cors = require('cors')
 const app = express();
+
 
 const auth = require("./routes/auth");
 const users = require("./routes/user");
@@ -49,6 +51,9 @@ app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerJsDoc(swaggerSpec))
 app.use(express.json());
 app.use(morgan("dev"));
 app.use(express.urlencoded({ extended: false }));
+app.use(cors({
+  origin: '*',
+}))
 
 auth(app);
 users(app);
